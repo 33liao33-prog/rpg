@@ -1,0 +1,296 @@
+<div class="battle-container" id="battle-container" style="display:none;">
+
+  <div class="units-panel" id="enemy-panel">
+    <h3>敌方单位</h3>
+    <div id="enemy-units"></div>
+  </div>
+
+  <div class="units-panel" id="player-panel">
+    <h3>我方单位</h3>
+    <div id="player-units"></div>
+  </div>
+
+  <div class="action-order-bar" id="action-order-bar"></div>
+
+<div class="log-panel" id="log-panel" style="grid-column: 1 / -1;">
+  <div class="log-header">
+    <h4>📜 战斗日志</h4>
+    <button class="log-expand-btn" id="btn-expand-log" title="放大查看日志">🔍 放大</button>
+  </div>
+  <div id="log-content" style="max-height: 160px; overflow-y: auto;">战斗日志</div>
+</div>
+
+<!-- 放大日志模态框 -->
+<div id="log-modal" class="modal-overlay">
+  <div class="modal-content log-modal">
+    <div class="log-modal-header">
+      <h3>📜 战斗日志 - 详细记录</h3>
+      <button class="log-modal-close" id="btn-close-log-modal">✕</button>
+    </div>
+    <div class="log-modal-body" id="log-modal-body">
+    </div>
+    <div class="log-modal-footer">
+      <button class="gem-button log-copy-btn" id="btn-copy-log">📋 复制日志</button>
+      <button class="gem-button secondary" id="btn-close-log-footer">关闭</button>
+    </div>
+  </div>
+</div>
+
+  <div class="control-panel" id="control-panel">
+    <button class="gem-button" id="btn-end-turn">结束回合</button>
+    <button class="gem-button secondary" id="btn-skip">跳过行动</button>
+  </div>
+</div>
+
+<div id="selection-overlay" class="modal-overlay show">
+<button id="fullscreen-btn" class="fullscreen-btn" style="
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1001;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  font-size: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+">
+  ⛶
+</button>
+  <div class="modal-content">
+    <h2 class="modal-title">选择出场单位（1-4名）</h2>
+    <div class="unit-selection" id="selection-grid"></div>
+    
+    <!-- 新增：选项开关区域 -->
+    <div style="margin-top: 20px; padding: 15px; background: var(--primary-50); border-radius: 8px; border: 1px solid var(--primary-200);">
+      <h4 style="margin-bottom: 12px; color: var(--primary-700); font-size: 0.9em;">⚙️ 战斗选项</h4>
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+        <div style="flex: 1;">
+          <div style="font-weight: bold; font-size: 0.85em; color: var(--neutral-700);">R18开关</div>
+          <div style="font-size: 0.7em; color: var(--neutral-500);">关闭后，敌方单位不会因我方服装破损/拘束状态而固定使用色色技能组</div>
+        </div>
+        <!-- 开关按钮 -->
+        <label class="toggle-switch" style="flex-shrink: 0;">
+          <input type="checkbox" id="toggle-enemy-special-skills" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+  <div style="border-top: 1px solid var(--neutral-300); margin: 12px 0; padding-top: 12px;">
+    <div style="font-weight: bold; font-size: 0.85em; color: var(--neutral-700); margin-bottom: 10px;">👤 男性单位特殊效果开关</div>
+    
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+      <div style="flex: 1;">
+        <div style="font-weight: bold; font-size: 0.8em; color: var(--neutral-700);">寄生效果</div>
+        <div style="font-size: 0.65em; color: var(--neutral-500);">开启后，受击方为男性时可被施加寄生状态</div>
+      </div>
+      <label class="toggle-switch" style="flex-shrink: 0;">
+        <input type="checkbox" id="toggle-male-parasite" checked>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+      <div style="flex: 1;">
+        <div style="font-weight: bold; font-size: 0.8em; color: var(--neutral-700);">怀孕效果</div>
+        <div style="font-size: 0.65em; color: var(--neutral-500);">开启后，受击方为男性时可被施加怀孕状态</div>
+      </div>
+      <label class="toggle-switch" style="flex-shrink: 0;">
+        <input type="checkbox" id="toggle-male-pregnancy" checked>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+      <div style="flex: 1;">
+        <div style="font-weight: bold; font-size: 0.8em; color: var(--neutral-700);">催眠效果</div>
+        <div style="font-size: 0.65em; color: var(--neutral-500);">开启后，受击方为男性时催眠机制可生效</div>
+      </div>
+      <label class="toggle-switch" style="flex-shrink: 0;">
+        <input type="checkbox" id="toggle-male-hypnosis" checked>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 15px; padding: 10px; background: var(--primary-50); border-radius: 8px; border: 1px solid var(--primary-200);">
+  <div style="font-weight: bold; font-size: 0.85em; color: var(--neutral-700); margin-bottom: 8px;">⚔️ 难度设置</div>
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <label for="difficulty-select" style="font-size: 0.8em;">难度：</label>
+    <select id="difficulty-select" style="padding: 4px 8px; border-radius: 4px; border: 1px solid var(--neutral-300); background: white; font-size: 0.8em;">
+      <option value="0.75">简单</option>
+      <option value="1.0" selected>普通</option>
+      <option value="1.25">困难</option>
+      <option value="1.5">极难</option>
+    </select>
+    <span style="font-size: 0.7em; color: var(--neutral-500);">（影响敌方单位属性）</span>
+  </div>
+</div>
+
+    <div style="text-align:center; margin-top:15px; display:flex; gap:10px; justify-content:center;">
+      <button class="gem-button secondary" id="btn-manage-characters">角色管理</button>
+      <button class="gem-button" id="btn-start-battle" disabled>开始战斗</button>
+    </div>
+  </div>
+</div>
+
+<div id="skill-modal" class="modal-overlay">
+  <div class="modal-content">
+    <h2 class="modal-title" id="skill-modal-title">选择技能</h2>
+    <div class="skill-list" id="skill-list"></div>
+    <div style="text-align:center; margin-top:15px;">
+      <button class="gem-button secondary" id="btn-cancel-skill">取消</button>
+    </div>
+  </div>
+</div>
+
+<div id="target-modal" class="modal-overlay">
+  <div class="modal-content">
+    <h2 class="modal-title" id="target-modal-title">选择合体成员</h2>
+    <div id="target-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+    <div style="text-align:center; margin-top:15px; display:flex; gap:10px; justify-content:center;">
+      <button class="gem-button danger" id="btn-confirm-aoe" style="display:none;">确认全体攻击</button>
+      <button class="gem-button secondary" id="btn-cancel-target">取消</button>
+    </div>
+  </div>
+</div>
+
+<div id="skill-learn-modal" class="modal-overlay">
+  <div class="modal-content" style="max-width: 800px;">
+    <h2 class="modal-title">战利品 - 学习技能</h2>
+    <p style="text-align:center; color:#7e7890; margin-bottom:15px;">
+      选择一名角色，然后从敌方技能中选择一个进行学习
+    </p>
+    <div style="display: flex; gap: 20px;">
+      <div style="flex: 1; border-right: 1px solid var(--neutral-200); padding-right: 15px;">
+        <h4 style="margin-bottom: 10px; color: var(--primary-700);">选择角色</h4>
+        <div id="learn-character-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+      </div>
+      <div style="flex: 2; padding-left: 5px;">
+        <h4 style="margin-bottom: 10px; color: var(--primary-700);">选择技能</h4>
+        <div id="learn-skill-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto;"></div>
+        <div id="learn-skill-placeholder" style="text-align: center; padding: 40px; color: #aaa;">
+          请先在左侧选择一个角色
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:15px; display: flex; gap: 10px; justify-content: center;">
+      <button class="gem-button" id="btn-confirm-learn" disabled>确认学习</button>
+      <button class="gem-button secondary" id="btn-skip-learn">跳过</button>
+    </div>
+  </div>
+</div>
+
+<div id="character-manage-modal" class="modal-overlay">
+  <div class="modal-content" style="max-width: 900px;">
+    <h2 class="modal-title">角色管理</h2>
+    <div style="display: flex; gap: 20px;">
+      <div style="flex: 1; border-right: 1px solid var(--neutral-200); padding-right: 15px;">
+        <h4 style="margin-bottom: 10px; color: var(--primary-700);">选择角色</h4>
+        <div id="manage-character-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+      </div>
+      <div style="flex: 2; padding-left: 5px;" id="manage-detail-panel">
+        <p style="color:#999; text-align:center; padding:40px;">请选择角色</p>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:15px; display: flex; gap: 10px; justify-content: center;">
+      <button class="gem-button" id="btn-confirm-manage">确认修改</button>
+      <button class="gem-button secondary" id="btn-close-manage">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div id="gameover-modal" class="modal-overlay">
+  <div class="modal-content" style="text-align:center;">
+    <h2 class="modal-title" id="gameover-title"></h2>
+    <div id="gameover-stats"></div>
+    <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">
+      <button class="gem-button" id="btn-confirm-save" style="display:none;">确认保存数据</button>
+      <button class="gem-button danger" id="btn-refight" style="display:none;">重新战斗</button>
+      <button class="gem-button secondary" id="btn-generate-report">生成战报</button>
+    </div>
+  </div>
+</div>
+
+<div id="skill-view-modal" class="modal-overlay">
+  <div class="modal-content">
+    <h2 class="modal-title" id="skill-view-title">技能详情</h2>
+    <div id="skill-view-list" class="skill-list"></div>
+    <div style="text-align:center; margin-top:15px;">
+      <button class="gem-button secondary" id="btn-close-skill-view">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div id="btn-show-all-stats" style="
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+  color: white;
+  border: 2px solid var(--primary-300);
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(124, 77, 202, 0.3);
+  transition: all 0.3s ease;
+  display: none;
+" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 6px 16px rgba(124, 77, 202, 0.5)';"
+   onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(124, 77, 202, 0.3)';"
+   onclick="showAllUnitsStats()">
+  🔍
+</div>
+
+<div id="battle-fullscreen-btn" class="fullscreen-btn" style="
+  position: fixed;
+  top: 20px;
+  right: 80px;
+  z-index: 999;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+">
+  ⛶
+</div>
+
+<!-- 所有单位详细属性模态框 -->
+<div id="all-stats-modal" class="modal-overlay">
+  <div class="modal-content" style="max-width: 1200px; max-height: 90vh;">
+    <h2 class="modal-title">📊 所有单位详细属性</h2>
+    <div style="display: flex; gap: 20px; max-height: 70vh; overflow-y: auto;">
+      <div style="flex: 1; border-right: 2px solid var(--neutral-200); padding-right: 15px;">
+        <h3 style="color: var(--success); text-align: center; margin-bottom: 15px;">👥 我方单位</h3>
+        <div id="player-stats-detail" style="display: flex; flex-direction: column; gap: 12px;"></div>
+      </div>
+      <div style="flex: 1; padding-left: 15px;">
+        <h3 style="color: var(--danger); text-align: center; margin-bottom: 15px;">👹 敌方单位</h3>
+        <div id="enemy-stats-detail" style="display: flex; flex-direction: column; gap: 12px;"></div>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+      <button class="gem-button secondary" onclick="document.getElementById('all-stats-modal').classList.remove('show')">关闭</button>
